@@ -10,35 +10,80 @@ import glob, os
 files = glob.glob('*.txt')
 files.sort
 name  = []
-print files
-
+out = []
 
 corx,cory, SPL = np.genfromtxt("SPL.txt", delimiter = ",", unpack =True)
+point_x, point_y = np.genfromtxt("points.txt", delimiter = ",",unpack =True)
+
 print corx, cory, SPL
+cor  = np.zeros((len(SPL), 3))
+rooma = np.zeros((len(SPL), 3))
+roomb = np.zeros((len(SPL), 3))
+room = np.zeros((len(SPL), 3))
 
-k = lambda
-#liner1 = 
-
-#for x in files:
-#    no,ext = os.path.splitext(x)
-#    name.append( int( str( no ) ) )#[name]へ取得したファイル名リスト[no]から取得して格納していく
-
-
-
-#for x in xrange( len(name) ):
-#    name[x] = str(name[x]) + '.csv'
-#
-#for file in xrange(len(name)):
-#    filename = name[file]
-#    x,y = np.genfromtxt(filename, delimiter = ",", unpack = True)
-#    cor_x.append( x[0] *0.5 )
-#    cor_y.append( y[0] *0.5 )
-#
-#print cor_x, cor_y
-#for file in xrange(len(name)):
-#    filename = name[file]
-#    xlist,ylist = np.genfromtxt(filename,delimiter = ",", skip_header = 1,unpack = True )#, skip_header = 1  Tru
-#    cal_SPL(xlist, ylist)
+pt  = np.vstack((point_x,point_y)).T
+for i in xrange( len(corx) ):
+    cor[i, 0] = corx[i]
+    cor[i, 1] = cory[i]
+    cor[i, 2] =  SPL[i]
 
 
+def extraction_cor(x1, y1, x2, y2, x3, y3, x4, y4, cor):
+    #if(高さが同じなら限界値にyを設定/x座標が同じなら限界値にxを設定)
+    for i in xrange(1,int(max(corx)*2+1),1):#(min(corx), max(corx)*2, 1.0):
+        if (((y4-y3)/(x4-x3))*(i*0.5 -x3)+y3) > cor[i,1] :                      #x以上
+            print "A"
+            # if (((y2-y1)/(x2-x1))(i*0.5-x1)+y1) < cor[i,1]:                  #x以下
+           #     for k in xrange(1,int(max(cory)*2+1,1 )):
+           #         if ( ((x1-x2)/(y2-y1))(k*0.5 - y1)+x1) < cor[i,0] :       #y以下
+           #             if ( ((x3-x4)/(y4-y3))(k*0.5 - y3)+x3) > cor[i,0] :   #y以上
+           #                 room[i, 0] = corx[i]
+           #                 room[i, 1] = cory[i]
+           #                 room[i, 2] =  SPL[i]
+
+def reg_3(x1,x2,y1,y2,cor):
+    hoge(x1,x2,cor)
+    hoge2(y1,y2,rooma)
+
+def hoge(x1,x2,cor):
+    cnt = -1
+    if (x1 == x2):
+        for i in cor[:,0]:
+            cnt = cnt +1
+            if ( x1 <= i ): #領域→にあるとき
+                print i
+                rooma[cnt] = cor[cnt]
+    return(rooma)
+def hoge2(y1,y2,cor):
+    cnt = -1
+    if (y1 == y2):
+        for k in cor[:,1]:
+            cnt = cnt +1
+            if ( y1 <= k ): #領域↓にあるとき
+                print i
+                roomb[cnt] = cor[cnt]
+
+def hoge3(x1,x2,y1,y2,cor):
+    cnt = -1
+    for i in cor[:,0]:
+        cnt = cnt + 1
+        if (((y2-y1)/(x2-x1))*(i -x1)+y1) <= cor[cnt,1]: #直線より大きい値
+            rooma[cnt] = cor[cnt]
+    return(rooma)
+
+
+
+print "A"
+#reg_3(3,3,8,8,cor)
+#for i in xrange(200):
+#    print i, roomb[i] , cor[i]
+
+hoge3(1,8,1,8,cor)
+for i in xrange(250):
+    print rooma[i],cor[i]
+
+#for x in rooma:
+#    if x not in roomb:
+#        room.append(x)
+#print room
 
