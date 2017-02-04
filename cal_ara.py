@@ -28,62 +28,95 @@ for i in xrange( len(corx) ):
     cor[i, 2] =  SPL[i]
 
 
-def extraction_cor(x1, y1, x2, y2, x3, y3, x4, y4, cor):
-    #if(高さが同じなら限界値にyを設定/x座標が同じなら限界値にxを設定)
-    for i in xrange(1,int(max(corx)*2+1),1):#(min(corx), max(corx)*2, 1.0):
-        if (((y4-y3)/(x4-x3))*(i*0.5 -x3)+y3) > cor[i,1] :                      #x以上
-            print "A"
-            # if (((y2-y1)/(x2-x1))(i*0.5-x1)+y1) < cor[i,1]:                  #x以下
-           #     for k in xrange(1,int(max(cory)*2+1,1 )):
-           #         if ( ((x1-x2)/(y2-y1))(k*0.5 - y1)+x1) < cor[i,0] :       #y以下
-           #             if ( ((x3-x4)/(y4-y3))(k*0.5 - y3)+x3) > cor[i,0] :   #y以上
-           #                 room[i, 0] = corx[i]
-           #                 room[i, 1] = cory[i]
-           #                 room[i, 2] =  SPL[i]
 
-def reg_3(x1,x2,y1,y2,cor):
-    hoge(x1,x2,cor)
-    hoge2(y1,y2,rooma)
-
-def hoge(x1,x2,cor):
+def hoge(x1,x2,line,d):
+    """
+    x1,x2:座標
+    cor  :全体座標データのリスト
+    d    :左右のどちらを対象とするかd=1:右，d=2:左
+    """
     cnt = -1
     if (x1 == x2):
         for i in cor[:,0]:
             cnt = cnt +1
-            if ( x1 <= i ): #領域→にあるとき
-                print i
-                rooma[cnt] = cor[cnt]
-    return(rooma)
-def hoge2(y1,y2,cor):
+            if (d == 1):
+                if ( x1 <= i ): #|線|→にあるとき
+                    print i
+                    rooma[cnt] = line[cnt]
+                else:
+                    rooma[cnt] = 0
+            elif(d== 2):
+                if ( x1 >= i ): #←|線|にある場合
+                    print i
+                    rooma[cnt] = line[cnt]
+                else:
+                    rooma[cnt] = 0
+
+def hoge2(y1,y2,line,d):
+    """
+    d:   上下どちらを対象とするかd=1:上,d=2:下
+    """
     cnt = -1
     if (y1 == y2):
         for k in cor[:,1]:
             cnt = cnt +1
-            if ( y1 <= k ): #領域↓にあるとき
-                print i
-                roomb[cnt] = cor[cnt]
+            if (d == 1):
+                if ( y1 <= k ): #領域が↑にあるとき
+                    print k
+                    roomb[cnt] = line[cnt]
+                else:
+                    roomb[cnt] = 0
+            elif(d==2):
+                if ( y1 >= k ): #領域が↓にあるとき
+                    print k
+                    roomb[cnt] = line[cnt]
+                else:
+                    roomb[cnt] = 0
 
-def hoge3(x1,x2,y1,y2,cor):
+
+def hoge3(x1,x2,y1,y2,cor,d):
     cnt = -1
     for i in cor[:,0]:
         cnt = cnt + 1
         if (((y2-y1)/(x2-x1))*(i -x1)+y1) <= cor[cnt,1]: #直線より大きい値
             rooma[cnt] = cor[cnt]
+        elif (((y2-y1)/(x2-x1))*(i -x1)+y1) >= cor[cnt,1]: #直線より小さい値
+            rooma[cnt] = cor[cnt]
     return(rooma)
 
 
+def cal_reg(x1,x2,y1,y2,cor,d1,d2):
+    hoge (x1,x1,cor ,d1)
+    hoge (x2,x2,rooma,d2)
+    hoge2(y1,y1,rooma,d1)
+    hoge2(y2,y2,roomb,d2)
+
+
+def main():
+    cal_reg(3,6,1,4,cor,1,2)
+
 
 print "A"
-#reg_3(3,3,8,8,cor)
-#for i in xrange(200):
-#    print i, roomb[i] , cor[i]
+main()
 
-hoge3(1,8,1,8,cor)
-for i in xrange(250):
-    print rooma[i],cor[i]
 
-#for x in rooma:
-#    if x not in roomb:
-#        room.append(x)
-#print room
 
+
+
+"""
+for i in xrange(300):
+    print roomb[i],cor[i]
+
+A=SPL.reshape(19,19)
+def draw(data,cb_min,cb_max):  #cb_min,cb_max:カラーバーの下端と上端の値
+    import numpy as np
+    import matplotlib.pyplot as plt
+    X,Y=np.meshgrid(np.arange(data.shape[1]),np.arange(data.shape[0]))
+    plt.figure(figsize=(10,4))  #図の縦横比を指定する
+    div=20.0                    #図を描くのに何色用いるか
+    delta=(cb_max-cb_min)/div
+    interval=np.arange(cb_min,abs(cb_max)*2+delta,delta)[0:int(div)+1]
+    plt.contourf(X,Y,data,interval)
+    plt.show()
+draw(A,0,100)
+"""
