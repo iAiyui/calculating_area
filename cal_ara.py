@@ -73,7 +73,6 @@ def hoge2(y1,y2,line,d):
                 else:
                     roomb[cnt] = 0
 
-
 def hoge3(x1,x2,y1,y2,cor,d):
     cnt = -1
     for i in cor[:,0]:
@@ -84,23 +83,17 @@ def hoge3(x1,x2,y1,y2,cor,d):
             rooma[cnt] = cor[cnt]
     return(rooma)
 
-
 def cal_reg(x1,x2,y1,y2,cor,d1,d2):
     hoge (x1,x1,cor ,d1)
     hoge (x2,x2,rooma,d2)
     hoge2(y1,y1,rooma,d1)
     hoge2(y2,y2,roomb,d2)
 
-
 def main():
     cal_reg(3,6,1,4,cor,1,2)
 
-
 print "A"
 main()
-
-
-
 
 
 """
