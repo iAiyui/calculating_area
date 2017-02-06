@@ -14,20 +14,19 @@ out = []
 
 corx,cory, SPL = np.genfromtxt("SPL.txt", delimiter = ",", unpack =True)
 x1,x2,y1,y2 = np.genfromtxt("points.txt", delimiter = ",",unpack =True)
-print corx, cory, SPL
+#print corx, cory, SPL
 cor  = np.zeros((len(SPL), 3))
 rooma = np.zeros((len(SPL), 3))
 roomb = np.zeros((len(SPL), 3))
 room = np.zeros((len(SPL), 3))
-average = [len(x1) ]
+average =np.zeros(len(x1))
+counter = 1
 
 #pt  = np.vstack((point_x,point_y)).T
 for i in xrange( len(corx) ):
     cor[i, 0] = corx[i]
     cor[i, 1] = cory[i]
     cor[i, 2] =  SPL[i]
-
-
 
 def hoge(x1,x2,line,d):
     """
@@ -91,44 +90,48 @@ def cal_reg(x1,x2,y1,y2,cor,d1,d2):
     hoge2(y2,y2,roomb,d2)
 
 def cal_ave_SPL(reg_SPL):
-        count = 0
-        for j in xrange(len(x1)-1):
-            for i in xrange(len(reg_SPL)):
-                if (reg_SPL[i] != 0):
-                    count = count + 1
-                    reg_SPL[i] = 10**( 0.1 * reg_SPL[i] )
-        average[j] = 10 * log10( (1.0/(count))*sum(reg_SPL) )
-        print average[j]
-        #np.savetxt("ave_SPL.txt", average, fmt = "%7.4f" )
-#def cal_length(lx, ly, Sx, Sy)
-    
+    global average
+    global counter
 
+    count =0
+    for i in xrange(len(reg_SPL)):
+        if (reg_SPL[i] != 0):
+            count += 1
+            reg_SPL[i] = 10**( 0.1 * reg_SPL[i] )
+            counter = count
+    print counter
+    A = 10 * log10( (1.0/(counter))*sum(reg_SPL) )
+    return(A)
 
+def main():
+    for i in xrange(len(x1)):
+        global roomb
+        global rooma
+        global average
+        cal_reg(x1[i], x2[i], y1[i], y2[i], cor, 1, 2)
+        average[i] = cal_ave_SPL(roomb[:,2])
+        roomb = np.zeros_like(roomb)
 
 """-----------------------------------"""
 ############      main      #############
 """-----------------------------------"""
-
-for i in xrange(len(x1)):
-    def main():
-        cal_reg(x1[i], x2[i], y1[i], y2[i], cor, 1, 2)
-
-
-
-print "A"
 main()
 
 
-for i in xrange(300):
-    print i,roomb[i],cor[i]
+print average
 
-print x1,len(average)
 
-cal_ave_SPL(roomb[:,2])
+#for i in xrange(300):
+#    print i,roomb[i],cor[i]
+
+np.savetxt("SPL_average.txt",average, delimiter = ',',fmt = "%7.4f" )
+
+
+"""
 file =open('average_SPL.txt','w')
 file.write(str(average) )
 file.close()
-
+"""
 """
 A=SPL.reshape(19,19)
 def draw(data,cb_min,cb_max):  #cb_min,cb_max:カラーバーの下端と上端の値
