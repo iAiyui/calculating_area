@@ -41,13 +41,13 @@ def hoge(x1,x2,line,d):
             cnt = cnt +1
             if (d == 1):
                 if ( x1 <= i ): #|線|→にあるとき
-                    print i
+                    #print i
                     rooma[cnt] = line[cnt]
                 else:
                     rooma[cnt] = 0
             elif(d== 2):
                 if ( x1 >= i ): #←|線|にある場合
-                    print i
+                    #print i
                     rooma[cnt] = line[cnt]
                 else:
                     rooma[cnt] = 0
@@ -62,13 +62,13 @@ def hoge2(y1,y2,line,d):
             cnt = cnt +1
             if (d == 1):
                 if ( y1 <= k ): #領域が↑にあるとき
-                    print k
+                    #print k,'KKK'
                     roomb[cnt] = line[cnt]
                 else:
                     roomb[cnt] = 0
             elif(d==2):
                 if ( y1 >= k ): #領域が↓にあるとき
-                    print k
+                    #print k,'A'
                     roomb[cnt] = line[cnt]
                 else:
                     roomb[cnt] = 0
@@ -83,11 +83,30 @@ def hoge3(x1,x2,y1,y2,cor,d):
             rooma[cnt] = cor[cnt]
     return(rooma)
 
+
 def cal_reg(x1,x2,y1,y2,cor,d1,d2):
     hoge (x1,x1,cor ,d1)
     hoge (x2,x2,rooma,d2)
     hoge2(y1,y1,rooma,d1)
     hoge2(y2,y2,roomb,d2)
+
+def cal_ave_SPL(reg_SPL):
+        count = 0
+        for i in xrange(len(reg_SPL)):
+            if (reg_SPL[i] != 0):
+                count = count + 1
+                reg_SPL[i] = 10**( 0.1 * reg_SPL[i] )
+        average = 10 * log10( (1.0/(count))*sum(reg_SPL) )
+        print average
+
+def cal_length(lx, ly, Sx, Sy)
+    
+
+
+
+"""-----------------------------------"""
+############      main      #############
+"""-----------------------------------"""
 
 def main():
     cal_reg(3,6,1,4,cor,1,2)
@@ -96,10 +115,14 @@ print "A"
 main()
 
 
-"""
 for i in xrange(300):
-    print roomb[i],cor[i]
+    print i,roomb[i],cor[i]
 
+
+cal_ave_SPL(roomb[:,2])
+
+
+"""
 A=SPL.reshape(19,19)
 def draw(data,cb_min,cb_max):  #cb_min,cb_max:カラーバーの下端と上端の値
     import numpy as np
