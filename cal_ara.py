@@ -5,16 +5,17 @@ import math
 import matplotlib as mpl
 import numpy as np
 import glob, os
-
+import copy
 
 files = glob.glob('*.txt')
 files.sort
 name  = []
 out = []
-
+#data = np.genfromtxt("data.csv", delimiter=",", names=True, dtype=[('DATA1',int),('DATA2','S1'),('DATA3',int)])
 corx,cory, SPL = np.genfromtxt("SPL.txt", delimiter = ",", unpack =True)
-x1,x2,y1,y2 = np.genfromtxt("points.txt", delimiter = ",",unpack =True)
-#print corx, cory, SPL
+x1,x2,y1,y2= np.genfromtxt("points.csv", delimiter = ",", unpack =True) #dtype=["S3",float,float,float,float],
+#print corx, cory, SPL name,x1,x2,y1,y2
+
 cor  = np.zeros((len(SPL), 3))
 rooma = np.zeros((len(SPL), 3))
 roomb = np.zeros((len(SPL), 3))
@@ -29,11 +30,11 @@ for i in xrange( len(corx) ):
     cor[i, 2] =  SPL[i]
 
 def hoge(x1,x2,line,d):
-    """
+    """=============================================#
     x1,x2:座標
     cor  :全体座標データのリスト
     d    :左右のどちらを対象とするかd=1:右，d=2:左
-    """
+    """#============================================#
     cnt = -1
     if (x1 == x2):
         for i in cor[:,0]:
@@ -52,9 +53,9 @@ def hoge(x1,x2,line,d):
                     rooma[cnt] = 0
 
 def hoge2(y1,y2,line,d):
-    """
+    """#============================================#
     d:   上下どちらを対象とするかd=1:上,d=2:下
-    """
+    """#============================================#
     cnt = -1
     if (y1 == y2):
         for k in cor[:,1]:
@@ -118,14 +119,9 @@ def main():
 main()
 
 
-print average
-
-
-#for i in xrange(300):
-#    print i,roomb[i],cor[i]
-
+print average,name
+average = vstack((average,name))
 np.savetxt("SPL_average.txt",average, delimiter = ',',fmt = "%7.4f" )
-
 
 """
 file =open('average_SPL.txt','w')
