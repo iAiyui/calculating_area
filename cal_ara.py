@@ -13,7 +13,8 @@ name  = []
 out = []
 #data = np.genfromtxt("data.csv", delimiter=",", names=True, dtype=[('DATA1',int),('DATA2','S1'),('DATA3',int)])
 corx,cory, SPL = np.genfromtxt("SPL.txt", delimiter = ",", unpack =True)
-x1,x2,y1,y2= np.genfromtxt("points.csv", delimiter = ",", unpack =True) #dtype=["S3",float,float,float,float],
+x1,x2,y1,y2= np.genfromtxt("points.csv", delimiter = ",", unpack =True) 
+name = np.genfromtxt("name.txt",unpack =True, dtype ="str")
 #print corx, cory, SPL name,x1,x2,y1,y2
 
 cor  = np.zeros((len(SPL), 3))
@@ -100,7 +101,6 @@ def cal_ave_SPL(reg_SPL):
             count += 1
             reg_SPL[i] = 10**( 0.1 * reg_SPL[i] )
             counter = count
-    print counter
     A = 10 * log10( (1.0/(counter))*sum(reg_SPL) )
     return(A)
 
@@ -120,8 +120,21 @@ main()
 
 
 print average,name
-average = vstack((average,name))
-np.savetxt("SPL_average.txt",average, delimiter = ',',fmt = "%7.4f" )
+
+name = name[np.newaxis,:].T
+average = average[np.newaxis,:].T
+
+
+print average,name
+
+average = hstack((name,average))
+
+#ab = np.zeros(name.size, dtype=[('dat1, 'str'),('dat2',float)])
+#ab['dat1'] = name
+#ab['dat2'] = average
+
+print average 
+np.savetxt("SPL_average.txt",average ,fmt ="%s ", delimiter = ',')#,fmt = "%7.4f" )
 
 """
 file =open('average_SPL.txt','w')
